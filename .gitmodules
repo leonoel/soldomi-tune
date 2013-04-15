@@ -1,0 +1,3 @@
+[submodule "soldomi-commons"]
+	path = soldomi-commons
+	url = https://github.com/leonoel/soldomi-commons.git
