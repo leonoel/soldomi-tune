@@ -1,8 +1,14 @@
 <project>
 
   <path id="compile.classpath">
-<!--    <pathelement path="${classpath}"/> -->
     <pathelement location="soldomi-commons/build/classes"/>
+    <pathelement location="third-party/commons-math3-3.1.1.jar" />
+  </path>
+
+  <path id="test.classpath">
+    <pathelement location="build/classes"/>
+    <pathelement location="soldomi-commons/build/classes"/>
+    <pathelement location="third-party/commons-math3-3.1.1.jar" />
   </path>
 
   <target name="clean">
@@ -15,6 +21,12 @@
     <javac srcdir="src" destdir="build/classes">
       <classpath refid="compile.classpath"/>
     </javac>
+  </target>
+
+  <target name="test" depends="compile">
+    <java classname="org.soldomi.model.tune.Test">
+      <classpath refid="test.classpath" />
+    </java>
   </target>
 
   <target name="jar" depends="compile">
