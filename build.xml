@@ -1,37 +1,55 @@
 <project>
 
-  <path id="compile.classpath">
-    <pathelement location="soldomi-commons/build/classes"/>
+  <path id="dependencies">
+    <pathelement location="soldomi-commons/jar/soldomi-commons.jar"/>
     <pathelement location="third-party/commons-math3-3.1.1.jar" />
+  </path>
+
+  <path id="compile.classpath">
+    <path refid="dependencies"/>
+  </path>
+
+  <path id="compile-test.classpath">
+    <path refid="dependencies"/>
+    <pathelement location="bin"/>
   </path>
 
   <path id="test.classpath">
-    <pathelement location="build/classes"/>
-    <pathelement location="soldomi-commons/build/classes"/>
-    <pathelement location="third-party/commons-math3-3.1.1.jar" />
+    <path refid="dependencies"/>
+    <pathelement location="bin"/>
+    <pathelement location="bin-test"/>
   </path>
 
   <target name="clean">
-     <delete dir="build"/>
+     <delete dir="bin"/>
   </target>
 
   <target name="compile" depends="clean">
-    <ant dir="soldomi-commons" antfile="build.xml" target="compile"/>
-    <mkdir dir="build/classes"/>
-    <javac srcdir="src" destdir="build/classes">
+    <mkdir dir="bin"/>
+    <javac srcdir="src" destdir="bin">
       <classpath refid="compile.classpath"/>
     </javac>
   </target>
 
-  <target name="test" depends="compile">
-    <java classname="org.soldomi.model.tune.Test">
+  <target name="clean-test">
+     <delete dir="bin-test"/>
+  </target>
+
+  <target name="compile-test" depends="clean-test">
+    <mkdir dir="bin-test"/>
+    <javac srcdir="test" destdir="bin-test">
+      <classpath refid="compile-test.classpath"/>
+    </javac>
+  </target>
+
+  <target name="test" depends="compile,compile-test">
+    <java classname="Test">
       <classpath refid="test.classpath" />
     </java>
   </target>
 
   <target name="jar" depends="compile">
-    <mkdir dir="build/jar"/>
-    <jar destfile="build/jar/soldomi-tune.jar" basedir="build/classes">
+    <jar destfile="jar/soldomi-tune.jar" basedir="bin">
     </jar>
   </target>
 
