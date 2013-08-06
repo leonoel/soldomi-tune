@@ -50,6 +50,5 @@ public class Symbol {
 
     public final Property<Long> id = Property.makeLong();
     public final Property<Long> startTimeNumerator = Property.makeLong();
-    public final Property<Long> startTImeDenominator = Property.makeLong();
-
+    public final Property<Long> startTimeDenominator = Property.makeLong();
 }
