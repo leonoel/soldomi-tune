@@ -1,14 +1,29 @@
 package org.soldomi.model.tune;
 
+import org.soldomi.commons.Function;
+import org.soldomi.commons.Edge;
 import org.soldomi.commons.Property;
-import org.soldomi.commons.SingleRelationship;
-import org.apache.commons.math3.fraction.Fraction;
 
 public class Segment {
-    public final Property<Long> id = new Property<Long>();
-    public final SingleRelationship<Segment, Symbol> symbol = new SingleRelationship<Segment, Symbol>(this);
-    public final SingleRelationship<Segment, Tuplet> tuplet = new SingleRelationship<Segment, Tuplet>(this);
-    public final SingleRelationship<Segment, Note> note = new SingleRelationship<Segment, Note>(this);
-    public final Property<Fraction> duration = new Property<Fraction>();
-    public final Property<Integer> dotCount = new Property<Integer>();
+    public static final Function<Void, Segment> constructor = new Function<Void, Segment>() {
+	@Override public Segment apply(Void value) { return new Segment(); }
+    };
+
+    public static final Function<Segment, Edge<Segment, Symbol>> metaSymbol = new Function<Segment, Edge<Segment, Symbol>>() {
+	@Override public Edge<Segment, Symbol> apply(Segment segment) { return segment.symbol; }
+    };
+
+    public static final Function<Segment, Edge<Segment, Note>> metaNote = new Function<Segment, Edge<Segment, Note>>() {
+	@Override public Edge<Segment, Note> apply(Segment segment) { return segment.note; }
+    };
+
+    public final Edge<Segment, Symbol> symbol = Edge.makeOne(this,
+							     Symbol.constructor,
+							     Symbol.metaSegment);
+
+    public final Edge<Segment, Note> note = Edge.makeOne(this,
+							 Note.constructor,
+							 Note.metaSegment);
+    public final Property<Long> id = Property.makeLong();
 }
+

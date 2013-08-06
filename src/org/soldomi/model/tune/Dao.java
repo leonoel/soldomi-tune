@@ -10,12 +10,13 @@ import java.sql.SQLException;
 
 import org.soldomi.commons.EnumBaseMapper;
 import org.soldomi.commons.DaoAction;
-import org.soldomi.commons.DaoAction.DaoException;
+//import org.soldomi.commons.DaoAction.DaoException;
 
 import org.apache.commons.math3.fraction.Fraction;
 
 
 public interface Dao {
+    /*
     public static class BlockStaff {
 	public final Block block;
 	public final Staff staff;
@@ -31,7 +32,7 @@ public interface Dao {
     public static final EnumBaseMapper<Accidental> AccidentalMapper = new EnumBaseMapper<Accidental>(Accidental.class);
     public static final EnumBaseMapper<SymbolType> SymbolTypeMapper = new EnumBaseMapper<SymbolType>(SymbolType.class);
 
-    public static final DaoAction<List<Tune>> getAll = new DaoAction<List<Tune>>() {
+    public static final DaoAction<List<Tune>> getAllTunes = new DaoAction<List<Tune>>() {
 	private final String sql = "select id, name, last_modified from tune";
 
 	@Override public void query(Connection connection, List<Tune> tuneList) throws SQLException {
@@ -663,5 +664,5 @@ public interface Dao {
 	    tuplet.id.set(resultSet.getLong(1));
 	}
     };
-
+    */
 }

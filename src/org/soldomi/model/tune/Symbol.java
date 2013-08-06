@@ -1,20 +1,55 @@
 package org.soldomi.model.tune;
 
-import org.soldomi.commons.SingleRelationship;
+import org.soldomi.commons.Function;
+import org.soldomi.commons.Edge;
 import org.soldomi.commons.Property;
-import org.apache.commons.math3.fraction.Fraction;
 
 public class Symbol {
-    public final Property<Long> id = new Property<Long>();
+    public static final Function<Void, Symbol> constructor = new Function<Void, Symbol>() {
+	@Override public Symbol apply(Void value) { return new Symbol(); }
+    };
 
-    public final SingleRelationship<Symbol, Staff> staff = new SingleRelationship<Symbol, Staff>(this);
-    public final SingleRelationship<Symbol, Block> block = new SingleRelationship<Symbol, Block>(this);
+    public static final Function<Symbol, Edge<Symbol, Staff>> metaStaff = new Function<Symbol, Edge<Symbol, Staff>>() {
+	@Override public Edge<Symbol, Staff> apply(Symbol symbol) { return symbol.staff; }
+    };
 
-    public final Property<SymbolType> type = new Property<SymbolType>();
-    public final Property<Fraction> startTime = new Property<Fraction>();
-
-    public final SingleRelationship<Symbol, Segment> segment = new SingleRelationship<Symbol, Segment>(this);
-    public final SingleRelationship<Symbol, TimeSignature> timeSignature = new SingleRelationship<Symbol, TimeSignature>(this);
-    public final SingleRelationship<Symbol, KeySignature> keySignature = new SingleRelationship<Symbol, KeySignature>(this);
+    public static final Function<Symbol, Edge<Symbol, Block>> metaBlock = new Function<Symbol, Edge<Symbol, Block>>() {
+	@Override public Edge<Symbol, Block> apply(Symbol symbol) { return symbol.block; }
+    };
     
+    public static final Function<Symbol, Edge<Symbol, Segment>> metaSegment = new Function<Symbol, Edge<Symbol, Segment>>() {
+	@Override public Edge<Symbol, Segment> apply(Symbol symbol) { return symbol.segment; }
+    };
+
+    public static final Function<Symbol, Edge<Symbol, TimeSignature>> metaTimeSignature = new Function<Symbol, Edge<Symbol, TimeSignature>>() {
+	@Override public Edge<Symbol, TimeSignature> apply(Symbol symbol) { return symbol.timeSignature; }
+    };
+
+    public static final Function<Symbol, Edge<Symbol, KeySignature>> metaKeySignature = new Function<Symbol, Edge<Symbol, KeySignature>>() {
+	@Override public Edge<Symbol, KeySignature> apply(Symbol symbol) { return symbol.keySignature; } 
+    };
+
+    public final Edge<Symbol, Staff> staff = Edge.makeOne(this,
+							  Staff.constructor,
+							  Staff.metaSymbols);
+    public final Edge<Symbol, Block> block = Edge.makeOne(this,
+							  Block.constructor,
+							  Block.metaSymbols);
+
+    public final Edge<Symbol, Segment> segment = Edge.makeOne(this,
+							      Segment.constructor,
+							      Segment.metaSymbol);
+
+    public final Edge<Symbol, TimeSignature> timeSignature = Edge.makeOne(this,
+									  TimeSignature.constructor,
+									  TimeSignature.metaSymbol);
+
+    public final Edge<Symbol, KeySignature> keySignature = Edge.makeOne(this,
+									KeySignature.constructor,
+									KeySignature.metaSymbol);
+
+    public final Property<Long> id = Property.makeLong();
+    public final Property<Long> startTimeNumerator = Property.makeLong();
+    public final Property<Long> startTImeDenominator = Property.makeLong();
+
 }

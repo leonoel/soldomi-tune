@@ -1,4 +1,5 @@
 ivy
+lib
 *.class
 *~
 

@@ -1,11 +1,21 @@
 package org.soldomi.model.tune;
 
+import org.soldomi.commons.Function;
+import org.soldomi.commons.Edge;
 import org.soldomi.commons.Property;
-import org.soldomi.commons.SingleRelationship;
 
 public class Note {
-    public final Property<Long> id = new Property<Long>();
-    public final SingleRelationship<Note, Segment> segment = new SingleRelationship<Note, Segment>(this);
-    public final Property<Accidental> accidental = new Property<Accidental>();
-    public final Property<Pitch> pitch = new Property<Pitch>();
+    public static final Function<Void, Note> constructor = new Function<Void, Note>() {
+	@Override public Note apply(Void value) { return new Note(); }
+    };
+
+    public static final Function<Note, Edge<Note, Segment>> metaSegment = new Function<Note, Edge<Note, Segment>>() {
+	@Override public Edge<Note, Segment> apply(Note note) { return note.segment; }
+    };
+
+    public final Edge<Note, Segment> segment = Edge.makeOne(this,
+							    Segment.constructor,
+							    Segment.metaNote);
+    public final Property<Long> id = Property.makeLong();
 }
+

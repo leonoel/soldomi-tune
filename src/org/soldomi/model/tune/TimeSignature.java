@@ -1,11 +1,20 @@
 package org.soldomi.model.tune;
 
+import org.soldomi.commons.Function;
+import org.soldomi.commons.Edge;
 import org.soldomi.commons.Property;
-import org.soldomi.commons.SingleRelationship;
 
 public class TimeSignature {
-    public final Property<Long> id = new Property<Long>();
-    public final SingleRelationship<TimeSignature, Symbol> symbol = new SingleRelationship<TimeSignature, Symbol>(this);
-    public final Property<Integer> beatCount = new Property<Integer>();
-    public final Property<NoteValue> beatValue = new Property<NoteValue>();
+    public static final Function<Void, TimeSignature> constructor = new Function<Void, TimeSignature>() {
+	@Override public TimeSignature apply(Void value) { return new TimeSignature(); }
+    };
+
+    public static final Function<TimeSignature, Edge<TimeSignature, Symbol>> metaSymbol = new Function<TimeSignature, Edge<TimeSignature, Symbol>>() {
+	@Override public Edge<TimeSignature, Symbol> apply(TimeSignature timeSignature) { return timeSignature.symbol; }
+    };
+    
+    public final Edge<TimeSignature, Symbol> symbol = Edge.makeOne(this,
+								  Symbol.constructor,
+								  Symbol.metaTimeSignature);
+    public final Property<Long> id = Property.makeLong();
 }
