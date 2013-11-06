@@ -33,7 +33,7 @@
     <javac srcdir="src" destdir="bin">
       <classpath>
 	<path refid="compile.dependencies"/>
-	<pathelement location="soldomi-commons/jar/soldomi-commons.jar"/>
+	<pathelement location="../soldomi-commons/jar/soldomi-commons.jar"/>
       </classpath>
     </javac>
   </target>
@@ -53,7 +53,7 @@
       <classpath>
 	<path refid="compile.dependencies" />
 	<path refid="test.dependencies" />
-	<pathelement location="soldomi-commons/jar/soldomi-commons.jar"/>
+	<pathelement location="../soldomi-commons/jar/soldomi-commons.jar"/>
 	<pathelement location="bin"/>
       </classpath>
     </javac>
@@ -68,7 +68,7 @@
       <classpath>
 	<path refid="compile.dependencies"/>
 	<path refid="test.dependencies"/>
-	<pathelement location="soldomi-commons/jar/soldomi-commons.jar"/>
+	<pathelement location="../soldomi-commons/jar/soldomi-commons.jar"/>
 	<pathelement location="bin"/>
 	<pathelement location="bin-test"/>
 	<pathelement location="resources"/>

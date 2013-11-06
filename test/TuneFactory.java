@@ -44,8 +44,6 @@ public interface TuneFactory {
 		    block.sect.bind(sect);
 		}
 
-		System.out.println(Test.printTuneInfo(tune));
-		
 		return tune;
 	    }
 

@@ -1,13 +1,12 @@
-import org.soldomi.model.tune.Tune;
-import org.soldomi.model.tune.TuneSet;
-import org.soldomi.model.tune.Syst;
-import org.soldomi.model.tune.Staff;
-import org.soldomi.model.tune.Sect;
-import org.soldomi.model.tune.Block;
-import org.soldomi.model.tune.TuneDao;
-import org.soldomi.model.tune.TuneJson;
+import org.soldomi.model.tune2.Tune;
+import org.soldomi.model.tune2.Syst;
+import org.soldomi.model.tune2.Staff;
+import org.soldomi.model.tune2.Sect;
+import org.soldomi.model.tune2.Block;
+import org.soldomi.model.tune2.TuneDao;
+import org.soldomi.model.tune2.TuneJson;
 
-import org.soldomi.commons.Function;
+import org.soldomi.commons2.Result;
 
 import org.h2.tools.Server;
 
@@ -60,10 +59,15 @@ public class Test {
     };
 
     private static void makeDataSet() throws Exception {
-	for (final TuneFactory tuneFactory : new TuneFactory[] {TuneFactory.brassBand}) {
+	for (final TuneFactory2 tuneFactory : new TuneFactory2[] {TuneFactory2.brassBand}) {
 	    new WithConnection() {
 		@Override protected void action(Connection connection) throws Exception {
-		    TuneDao.insertTuneWithStavesAndBlocks.run(connection, tuneFactory.make());
+		    Result<Tune> result = TuneDao.insertTuneWithSystsAndSects.run(connection, tuneFactory.make());
+		    if (result.success) {
+			System.out.println(TuneJson.tuneWithSystsAndSects.write(result.value()).toString());
+		    } else {
+			System.out.println("makeDataSet : Error : " + result.error());
+		    }
 		}
 	    }.run();
 	}
@@ -71,36 +75,27 @@ public class Test {
 
     private static WithConnection getAllTunes = new WithConnection() {
         @Override protected void action(final Connection connection) throws Exception {
-	    TuneSet allTunes = new TuneSet();
-	    TuneDao.getAllTunes.run(connection, allTunes);
-	    allTunes.tunes.forEach(new Function<Tune, Void>() {
-		    @Override public Void apply(Tune tune) {
-			TuneDao.getTuneWithStaffsAndBlocks.run(connection, tune);
-			System.out.println(TuneJson.writeTune.toJsonNode(tune).toString());
-			return null;
-		    }
-		});
 	}
     };
 
     public static String printTuneInfo(Tune tune) {
 	String newLine = System.getProperty("line.separator");
 	StringBuilder builder = new StringBuilder();
-	builder.append(tune.name.get());
+	builder.append(tune.name);
 	builder.append(newLine);
 	for (Syst syst : tune.systs) {
-	    builder.append(syst.name.get());
+	    builder.append(syst.name);
 	    builder.append(newLine);
 	    for (Staff staff : syst.staves) {
-		builder.append(staff.name.get());
+		builder.append(staff.name);
 		builder.append(newLine);
 	    }
 	}
 	for (Sect sect : tune.sects) {
-	    builder.append(sect.startTime.get());
+	    builder.append(sect.startTime);
 	    builder.append(newLine);
 	    for (Block block : sect.blocks) {
-		builder.append(block.startTime.get());
+		builder.append(block.startTime);
 		builder.append(newLine);
 	    }
 	}
