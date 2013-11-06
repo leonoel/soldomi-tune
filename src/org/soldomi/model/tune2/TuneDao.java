@@ -134,7 +134,7 @@ public class TuneDao {
     	}
     };
 
-    public static final DaoAction<Long, List<Tune>> getTune = new SqlSelect<Long, Tune>("SELECT id, name FROM tune WHERE id = ?") {
+    public static final DaoAction<Long, Tune> getTune = new SqlSelect<Long, Tune>("SELECT id, name FROM tune WHERE id = ?") {
 	@Override public ParameterSet withParameterSet(Long id) {
 	    return new ParameterSet().add(id);
 	}
@@ -148,6 +148,64 @@ public class TuneDao {
 			return new Tune(id, name);
 		    }
 		});
+	}
+    }.single();
+
+    public static final DaoAction<Long, List<Syst>> getTuneSysts = new SqlSelect<Long, Syst>("SELECT id, name FROM syst WHERE tune_id = ?") {
+	@Override public ParameterSet withParameterSet(Long tuneId) {
+	    return new ParameterSet().add(tuneId);
+	}
+
+	@Override public RowParser<Syst> withRowParser(final Long tuneId) {
+	    return new FieldSet()
+	    .addLong()
+	    .addString()
+	    .toRowParser(new Function2<Long, String, Syst>() {
+		    @Override public Syst apply(Long id, String name) {
+			return new Syst(id, tuneId, name);
+		    }
+		});
+	}
+    };
+
+    public static final DaoAction<Long, List<Sect>> getTuneSects = new SqlSelect<Long, Sect>("SELECT id, start_time FROM sect WHERE tune_id = ?") {
+	@Override public ParameterSet withParameterSet(Long tuneId) {
+	    return new ParameterSet().add(tuneId);
+	}
+
+	@Override public RowParser<Sect> withRowParser(final Long tuneId) {
+	    return new FieldSet()
+	    .addLong()
+	    .addLong()
+	    .toRowParser(new Function2<Long, Long, Sect>() {
+		    @Override public Sect apply(Long id, Long startTime) {
+			return new Sect(id, tuneId, startTime);
+		    }
+		});
+	}
+    };
+
+    public static final DaoAction<Long, Tune> getTuneWithSystsAndSects = new DaoAction<Long, Tune>() {
+	@Override public Result<Tune> run(Connection connection, Long id) {
+	    return getTune
+	    .chain(new DaoAction<Tune, Tune>() {
+		    @Override public Result<Tune> run(Connection connection, final Tune tune) {
+			return getTuneSysts.map(new Function1<List<Syst>, Tune>() {
+				@Override public Tune apply(List<Syst> systs) {
+				    return tune.withSysts(systs);
+				}
+			    }).run(connection, tune.id);
+		    }
+		})
+	    .chain(new DaoAction<Tune, Tune>() {
+		    @Override public Result<Tune> run(Connection connection, final Tune tune) {
+			return getTuneSects.map(new Function1<List<Sect>, Tune>() {
+				@Override public Tune apply(List<Sect> sects) {
+				    return tune.withSects(sects);
+				}
+			    }).run(connection, tune.id);
+		    }
+		}).run(connection, id);
 	}
     };
 
