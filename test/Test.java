@@ -31,7 +31,7 @@ public class Test {
 	    createTables.run();
 	    makeDataSet();
 
-	    getAllTunes.run();
+	    System.out.println(TuneJson.tuneWithSystsAndSects.write(getTune(1L)));
 
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -41,42 +41,48 @@ public class Test {
 	}
     }
 
-    private static abstract class WithConnection {
-	protected abstract void action(Connection connection) throws Exception;
-	public void run() throws Exception {
-	    action(DriverManager.getConnection("jdbc:h2:mem:test", "sa", ""));
+    private static abstract class WithConnection<T> {
+	protected abstract T action(Connection connection) throws Exception;
+	public T run() throws Exception {
+	    return action(DriverManager.getConnection("jdbc:h2:mem:test", "sa", ""));
 	}
     }
 
-    private static WithConnection createTables = new WithConnection() {
-	@Override protected void action(Connection connection) throws Exception {
+    private static WithConnection<Void> createTables = new WithConnection<Void>() {
+	@Override protected Void action(Connection connection) throws Exception {
 	    InputStream in = Tune.class.getResourceAsStream("tables.sql");
 	    Scanner s = new Scanner(in).useDelimiter("\\A");
 	    String sql = s.hasNext() ? s.next() : null;
 	    Statement statement = connection.createStatement();
 	    statement.execute(sql);
+	    return null;
 	}
     };
 
     private static void makeDataSet() throws Exception {
 	for (final TuneFactory2 tuneFactory : new TuneFactory2[] {TuneFactory2.brassBand}) {
-	    new WithConnection() {
-		@Override protected void action(Connection connection) throws Exception {
-		    Result<Tune> result = TuneDao.insertTuneWithSystsAndSects.run(connection, tuneFactory.make());
+	    new WithConnection<Void>() {
+		@Override protected Void action(Connection connection) throws Exception {
+		    Tune tune = tuneFactory.make();
+		    Result<Tune> result = TuneDao.insertTuneWithSystsAndSects.run(connection, tune);
 		    if (result.success) {
 			System.out.println(TuneJson.tuneWithSystsAndSects.write(result.value()).toString());
 		    } else {
 			System.out.println("makeDataSet : Error : " + result.error());
 		    }
+		    return null;
 		}
 	    }.run();
 	}
     }
 
-    private static WithConnection getAllTunes = new WithConnection() {
-        @Override protected void action(final Connection connection) throws Exception {
-	}
-    };
+    private static Tune getTune(final Long id) throws Exception {
+	return new WithConnection<Tune>() {
+	    @Override protected Tune action(final Connection connection) throws Exception {
+		return TuneDao.getTuneWithSystsAndSects.run(connection, id).value();
+	    }
+	}.run();
+    }
 
     public static String printTuneInfo(Tune tune) {
 	String newLine = System.getProperty("line.separator");

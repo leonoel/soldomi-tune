@@ -11,7 +11,11 @@ public class Staff {
     public final List<Symbol> symbols;
 
     public Staff(String name) {
-	this(null, null, name, new ArrayList<Symbol>());
+	this(null, null, name);
+    }
+
+    public Staff(Long id, Long systId, String name) {
+	this(id, systId, name, new ArrayList<Symbol>());
     }
 
     public Staff(Long id, Long systId, String name, List<Symbol> symbols) {

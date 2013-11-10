@@ -11,7 +11,11 @@ public class Block {
     public final List<Symbol> symbols;
 
     public Block(Long startTime) {
-	this(null, null, startTime, new ArrayList<Symbol>());
+	this(null, null, startTime);
+    }
+
+    public Block(Long id, Long sectId, Long startTime) {
+	this(id, sectId, startTime, new ArrayList<Symbol>());
     }
 
     public Block(Long id, Long sectId, Long startTime, List<Symbol> symbols) {

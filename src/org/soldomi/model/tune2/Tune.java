@@ -30,9 +30,8 @@ public class Tune {
 	for (Syst syst : this.systs) {
 	    systs.add(syst.withTuneId(id));
 	}
-
 	List<Sect> sects = new ArrayList<Sect>();
-	for (Sect sect : sects) {
+	for (Sect sect : this.sects) {
 	    sects.add(sect.withTuneId(id));
 	}
 	return new Tune(id, name, systs, sects);
