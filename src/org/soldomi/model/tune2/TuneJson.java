@@ -1,7 +1,7 @@
 package org.soldomi.model.tune2;
 
 import org.soldomi.commons2.JsonWriter;
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 
 public class TuneJson {

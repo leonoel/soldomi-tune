@@ -2,3 +2,5 @@ ivy
 lib
 *.class
 *~
+*swp 
+
