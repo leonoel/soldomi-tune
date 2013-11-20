@@ -47,4 +47,9 @@ public class Syst {
 	return withStaves(staves);
     }
 
+    public Syst replaceStaff(Staff oldStaff, Staff newStaff) {
+	List<Staff> staves = new ArrayList<Staff>(this.staves);
+	staves.set(staves.indexOf(oldStaff), newStaff);
+	return new Syst(id, tuneId, name, staves);
+    }
 }

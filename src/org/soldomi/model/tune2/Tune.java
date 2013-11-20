@@ -56,4 +56,16 @@ public class Tune {
 	sects.add(sect);
 	return withSects(sects);
     }
+
+    public Tune replaceSyst(Syst oldSyst, Syst newSyst) {
+	List<Syst> systs = new ArrayList<Syst>(this.systs);
+	systs.set(systs.indexOf(oldSyst), newSyst);
+	return new Tune(id, name, systs, sects);
+    }
+
+    public Tune replaceSect(Sect oldSect, Sect newSect) {
+	List<Sect> sects = new ArrayList<Sect>(this.sects);
+	sects.set(sects.indexOf(oldSect), newSect);
+	return new Tune(id, name, systs, sects);
+    }
 }

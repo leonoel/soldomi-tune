@@ -42,4 +42,16 @@ public class Staff {
 	symbols.add(symbol);
 	return withSymbols(symbols);
     }
+
+    public Staff addSymbols(List<Symbol> s) {
+	List<Symbol> symbols = new ArrayList<Symbol>(this.symbols);
+	symbols.addAll(s);
+	return withSymbols(symbols);
+    }
+
+    public Staff replaceSymbol(Symbol oldSymbol, Symbol newSymbol) {
+	List<Symbol> symbols = new ArrayList<Symbol>(this.symbols);
+	symbols.set(symbols.indexOf(oldSymbol), newSymbol);
+	return new Staff(id, systId, name, symbols);
+    }
 }

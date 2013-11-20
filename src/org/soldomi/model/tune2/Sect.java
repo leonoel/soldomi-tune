@@ -46,4 +46,10 @@ public class Sect {
 	blocks.add(block);
 	return withBlocks(blocks);
     }
+
+    public Sect replaceBlock(Block oldBlock, Block newBlock) {
+	List<Block> blocks = new ArrayList<Block>(this.blocks);
+	blocks.set(blocks.indexOf(oldBlock), newBlock);
+	return new Sect(id, tuneId, startTime, blocks);
+    }
 }

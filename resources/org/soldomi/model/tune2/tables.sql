@@ -41,9 +41,9 @@ create table symbol (
   id                        bigint not null auto_increment,
   staff_id                  bigint not null,
   block_id                  bigint not null,
-  start_time_n              int,
-  start_time_d              int not null,
-  symbol_type               varchar(255),
+  start_time_numerator      int,
+  start_time_denominator    int not null,
+  symbol_type               int not null,
   foreign key (staff_id)    references staff(id),
   foreign key (block_id)    references block(id),
   primary key (id)
@@ -52,8 +52,8 @@ create table symbol (
 create table segment (
   id                        bigint not null auto_increment,
   symbol_id                 bigint not null,
-  duration_n                int,
-  duration_d                int not null,
+  duration_numerator        int,
+  duration_denominator      int not null,
   dot_count                 int,
   tuplet_id                 bigint,
   foreign key (symbol_id)   references symbol(id),
@@ -69,9 +69,9 @@ create table tuplet (
 create table note (
   id                        bigint not null auto_increment,
   segment_id                bigint not null,
-  note_name                 varchar(255),
-  octave                    int,
-  accidental		    varchar(255),
+  note_name                 int not null,
+  octave                    int not null,
+  accidental		    int not null,
   foreign key (segment_id)  references segment(id),
   primary key (id)
 );
@@ -80,7 +80,7 @@ create table time_signature (
   id                        bigint not null auto_increment,
   symbol_id                 bigint not null,
   beat_count                int,
-  beat_value                varchar(255),
+  beat_value                int,
   foreign key (symbol_id)   references symbol(id),
   primary key (id)
 );
@@ -88,13 +88,13 @@ create table time_signature (
 create table key_signature (
   id                        bigint not null auto_increment,
   symbol_id                 bigint not null,
-  a                         varchar(255),
-  b                         varchar(255),
-  c                         varchar(255),
-  d                         varchar(255),
-  e                         varchar(255),
-  f                         varchar(255),
-  g                         varchar(255),
+  a                         int not null,
+  b                         int not null,
+  c                         int not null,
+  d                         int not null,
+  e                         int not null,
+  f                         int not null,
+  g                         int not null,
   foreign key (symbol_id)   references symbol(id),
   primary key (id)
 );

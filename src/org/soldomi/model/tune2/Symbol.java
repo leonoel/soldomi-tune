@@ -33,11 +33,66 @@ public class Symbol {
 
     }
 
+    public Symbol withId(Long id) {
+	Segment segment = this.segment;
+	if (segment != null) {
+	    segment = segment.withSymbolId(id);
+	}
+	TimeSignature timeSignature = this.timeSignature;
+	if (timeSignature != null) {
+	    timeSignature = timeSignature.withSymbolId(id);
+	}
+	KeySignature keySignature = this.keySignature;
+	if (keySignature != null) {
+	    keySignature = keySignature.withSymbolId(id);
+	}
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
+    public Symbol withBlockId(Long blockId) {
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
+    public Symbol withStaffId(Long staffId) {
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
+    public Symbol withKeySignature(KeySignature keySignature) {
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
+    public Symbol withTimeSignature(TimeSignature timeSignature) {
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
+    public Symbol withSegment(Segment segment) {
+	return new Symbol(id, staffId, blockId, startTime, symbolType, segment, timeSignature, keySignature);
+    }
+
     public static Symbol newClef(Fraction startTime, Clef clef) {
 	return new Symbol(null, null, null, startTime, clef.symbolType, null, null, null);
     }
 
-    public static Symbol newSegment(Fraction startTime, DurationSymbol durationSymbol, Boolean isRest, Fraction duration) {
-	return new Symbol(null, null, null, startTime, isRest ? durationSymbol.restSymbolType : durationSymbol.noteSymbolType, new Segment(duration), null, null);
+    public static Symbol newRest(Fraction startTime, DurationSymbol durationSymbol, Fraction duration, Integer dotCount) {
+	return new Symbol(null, null, null, startTime, durationSymbol.restSymbolType, new Segment(duration, dotCount), null, null);
+    }
+
+    public static Symbol newNote(Fraction startTime, DurationSymbol durationSymbol, Fraction duration, Integer dotCount, Pitch pitch, Accidental accidental) {
+	return new Symbol(null, null, null, startTime, durationSymbol.noteSymbolType, new Segment(duration, dotCount, new Note(pitch, accidental)), null, null);
+    }
+
+    public static Symbol newTimeSignature(Fraction startTime, Integer beatCount, NoteValue beatValue) {
+	return new Symbol(null, null, null, startTime, SymbolType.STANDARD_TIME_SIGNATURE, null, new TimeSignature(beatCount, beatValue), null);
+    }
+
+    public static Symbol newKeySignature(Fraction startTime,
+					 KeySignature.Modifier a,
+					 KeySignature.Modifier b,
+					 KeySignature.Modifier c,
+					 KeySignature.Modifier d,
+					 KeySignature.Modifier e,
+					 KeySignature.Modifier f,
+					 KeySignature.Modifier g) {
+	return new Symbol(null, null, null, startTime, SymbolType.KEY_SIGNATURE, null, null, new KeySignature(a, b, c, d, e, f, g));
     }
 }

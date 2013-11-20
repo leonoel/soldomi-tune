@@ -42,4 +42,16 @@ public class Block {
 	symbols.add(symbol);
 	return withSymbols(symbols);
     }
+
+    public Block addSymbols(List<Symbol> s) {
+	List<Symbol> symbols = new ArrayList<Symbol>(this.symbols);
+	symbols.addAll(s);
+	return withSymbols(symbols);
+    }
+
+    public Block replaceSymbol(Symbol oldSymbol, Symbol newSymbol) {
+	List<Symbol> symbols = new ArrayList<Symbol>(this.symbols);
+	symbols.set(symbols.indexOf(oldSymbol), newSymbol);
+	return new Block(id, sectId, startTime, symbols);
+    }
 }

@@ -3,6 +3,7 @@ import org.soldomi.model.tune2.Syst;
 import org.soldomi.model.tune2.Staff;
 import org.soldomi.model.tune2.Sect;
 import org.soldomi.model.tune2.Block;
+import org.soldomi.model.tune2.Symbol;
 import org.soldomi.model.tune2.TuneDao;
 import org.soldomi.model.tune2.TuneJson;
 
@@ -32,6 +33,7 @@ public class Test {
 	    makeDataSet();
 
 	    System.out.println(TuneJson.tuneWithSystsAndSects.write(getTune(1L)));
+	    System.out.println(TuneJson.symbols.write(getBlockSymbols(1L)));
 
 	} catch (Exception e) {
 	    e.printStackTrace();
@@ -78,8 +80,22 @@ public class Test {
 
     private static Tune getTune(final Long id) throws Exception {
 	return new WithConnection<Tune>() {
-	    @Override protected Tune action(final Connection connection) throws Exception {
+	    protected Tune action(final Connection connection) throws Exception {
 		return TuneDao.getTuneWithSystsAndSects.run(connection, id).value();
+	    }
+	}.run();
+    }
+
+    private static List<Symbol> getBlockSymbols(final Long id) throws Exception {
+	return new WithConnection<List<Symbol>>() {
+	    protected List<Symbol> action(Connection connection) throws Exception {
+		Result<List<Symbol>> result = TuneDao.getBlockSymbolsFull.run(connection, id);
+		if (result.success) {
+		    return result.value();
+		} else {
+		    System.out.println(result.error());
+		    return new ArrayList<Symbol>();
+		}
 	    }
 	}.run();
     }
