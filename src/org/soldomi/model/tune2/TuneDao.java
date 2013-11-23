@@ -535,7 +535,7 @@ public class TuneDao {
 	}
     }.single();
 
-    public static final DaoAction<Long, TimeSignature> getSymbolTimeSignature = new SqlSelect<Long, TimeSignature>("SELECT id, beat_count, beat_values FROM time_signature WHERE symbol_id = ?") {
+    public static final DaoAction<Long, TimeSignature> getSymbolTimeSignature = new SqlSelect<Long, TimeSignature>("SELECT id, beat_count, beat_value FROM time_signature WHERE symbol_id = ?") {
 	public ParameterSet withParameterSet(Long symbolId) {
 	    return new ParameterSet().add(symbolId);
 	}

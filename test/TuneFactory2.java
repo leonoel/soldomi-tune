@@ -5,7 +5,9 @@ import org.soldomi.model.tune2.Sect;
 import org.soldomi.model.tune2.Block;
 import org.soldomi.model.tune2.Symbol;
 import org.soldomi.model.tune2.DurationSymbol;
+import org.soldomi.model.tune2.SymbolType;
 import org.soldomi.model.tune2.NoteName;
+import org.soldomi.model.tune2.NoteValue;
 import org.soldomi.model.tune2.Accidental;
 import org.soldomi.model.tune2.Pitch;
 import org.soldomi.model.tune2.Clef;
@@ -22,6 +24,7 @@ public interface TuneFactory2 {
 	    private List<Symbol> makeDoReMiFa(Long startTime) {
 		List<Symbol> symbols = new ArrayList<Symbol>();
 		symbols.add(Symbol.newClef(Fraction.ZERO, Clef.TREBLE));
+		symbols.add(Symbol.newTimeSignature(Fraction.ZERO, 4, NoteValue.QUARTER));
 		symbols.add(Symbol.newNote(new Fraction(startTime), DurationSymbol.QUARTER, new Fraction(64), 0, new Pitch(NoteName.C, 3), Accidental.AUTO));
 		symbols.add(Symbol.newNote(new Fraction(startTime + 16), DurationSymbol.QUARTER, new Fraction(64), 0, new Pitch(NoteName.D, 3), Accidental.AUTO));
 		symbols.add(Symbol.newNote(new Fraction(startTime + 32), DurationSymbol.QUARTER, new Fraction(64), 0, new Pitch(NoteName.E, 3), Accidental.AUTO));

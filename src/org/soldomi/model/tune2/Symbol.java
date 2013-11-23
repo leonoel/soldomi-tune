@@ -85,6 +85,14 @@ public class Symbol {
 	return new Symbol(null, null, null, startTime, SymbolType.STANDARD_TIME_SIGNATURE, null, new TimeSignature(beatCount, beatValue), null);
     }
 
+    public static Symbol newTimeSignatureAllaBreve(Fraction startTime) {
+	return new Symbol(null, null, null, startTime, SymbolType.ALLA_BREVE, null, new TimeSignature(2, NoteValue.HALF), null);
+    }
+
+    public static Symbol newTimeSignatureCommonTime(Fraction startTime) {
+	return new Symbol(null, null, null, startTime, SymbolType.COMMON_TIME, null, new TimeSignature(4, NoteValue.QUARTER), null);
+    }
+
     public static Symbol newKeySignature(Fraction startTime,
 					 KeySignature.Modifier a,
 					 KeySignature.Modifier b,
